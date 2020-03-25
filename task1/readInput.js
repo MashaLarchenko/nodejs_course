@@ -5,11 +5,11 @@ const readInput = input => {
     return fs
       .createReadStream(`${__dirname}/${input}`, 'utf8')
       .on('error', () => {
-        process.on('exit', code => {
-          console.log(`About to exit with code: ${code}`);
-        });
-        process.stderr();
-
+        process.stderr.write(
+          process.on('exit', code => {
+            console.log(`About to exit with code: ${code}`);
+          })
+        );
         process.exitCode(1);
       });
   }
