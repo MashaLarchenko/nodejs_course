@@ -1,61 +1,65 @@
-// const shiftedAlphabet = require('./shiftedAlphabet');
+/* eslint-disable no-process-exit */
 const { program } = require('commander');
-// const path = require('path');
 const through2 = require('through2');
 const readInput = require('./readInput');
 const writeData = require('./writeData');
 const transformData = require('./transformData');
-const fs = require('fs');
-program.version('0.0.1');
 const { pipeline } = require('stream');
+
+program.version('0.0.1');
 
 program
   .option('-s, --shift <num>', 'a shift')
   .option('-i, --input <filename>', 'an input file')
   .option('-o, --output <filename>', 'an output file')
-  .requiredOption('-a, --action <action>', 'an action encode/decode');
+  .option('-a, --action <action>', 'an action encode/decode');
 
 program.parse(process.argv);
 
 if (!program.action || !program.shift) {
-  // throw new Error('--myoption required');
-  //   process.stderr.write('action and shift arguments are required');
-  process.stderr.write(
-    process.on('exit', code => {
-      console.log(`About to exit with code: ${code}`);
-    })
-  );
-  process.exitCode(1);
+  process.on('exit', code => {
+    process.stderr.write(
+      `Error: Action (encode/decode) are required argument: ${code}\n`
+    );
+  });
+  process.exit(1);
 }
 
-if (program.action) {
-  let shiftNumber;
-  switch (program.action) {
-    case 'encode':
-      shiftNumber = +program.shift;
-      break;
-    case 'decode':
-      shiftNumber = -program.shift;
-      break;
-    default:
-      shiftNumber = '';
-  }
+let shiftNumber;
+switch (program.action) {
+  case 'encode':
+    shiftNumber = +program.shift;
+    break;
+  case 'decode':
+    shiftNumber = -program.shift;
+    break;
+  default:
+    shiftNumber = '';
+}
 
-  pipeline(
-    readInput(program.input ? program.input : null),
-    through2((chunk, enc, callback) => {
-      transformData(chunk, enc, callback, shiftNumber);
-    }).on('data', data => {
-      writeData(program.output ? program.output : null, data);
-    }),
-    fs.createWriteStream(`${__dirname}/${program.output}`, 'utf8'),
-
-    err => {
-      if (err) {
-        console.error('Pipeline failed.', err);
+pipeline(
+  readInput(program.input ? program.input : null),
+  through2((chunk, enc, callback) => {
+    transformData(chunk, enc, callback, shiftNumber);
+    throw new Error('errr');
+  }),
+  writeData(program.output ? program.output : null),
+  err => {
+    if (err) {
+      console.log(err);
+      if (err.code === 'ENOENT') {
+        process.on('exit', code => {
+          process.stderr.write(`Error: No such file ${err.path}: ${code}\n`);
+        });
+        process.exit(1);
       } else {
-        console.log('Pipeline succeeded.');
+        process.on('exit', code => {
+          process.stderr.write(`inhandled error: ${code}\n`);
+        });
+        process.exit(err.code);
       }
+    } else {
+      console.log('Pipeline succeeded.');
     }
-  );
-}
+  }
+);

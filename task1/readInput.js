@@ -1,17 +1,9 @@
+/* eslint-disable no-process-exit */
 const fs = require('fs');
 
 const readInput = input => {
   if (input) {
-    return fs
-      .createReadStream(`${__dirname}/${input}`, 'utf8')
-      .on('error', () => {
-        process.stderr.write(
-          process.on('exit', code => {
-            console.log(`About to exit with code: ${code}`);
-          })
-        );
-        process.exitCode(1);
-      });
+    return fs.createReadStream(`${__dirname}/${input}`, 'utf8');
   }
   process.stdin.setEncoding('utf8');
 
