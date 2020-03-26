@@ -1,17 +1,11 @@
 const fs = require('fs');
+const getAbsolutePathconst = require('./getAbsolutePath');
 
-const writeData = (output, data) => {
+const writeData = output => {
   if (output) {
-    return fs.createWriteStream(`${__dirname}/${output}`).on('error', () => {
-      process.stderr.write(
-        process.on('exit', code => {
-          console.log(`About to exit with code: ${code}`);
-        })
-      );
-      // process.exitCode(4);
-    });
+    return fs.createWriteStream(getAbsolutePathconst(output), { flags: 'a' });
   }
-  process.stdout.write(`data: ${data}`);
+  return process.stdout;
 };
 
 module.exports = writeData;
