@@ -23,7 +23,11 @@ if (!program.action || !program.shift) {
 }
 
 if (program.output && !fs.existsSync(getAbsolutePath(program.output))) {
-  errorHandler('No such file or directory');
+  errorHandler(`No such file or directory ${__dirname}/${program.output}`);
+}
+
+if (program.shift >= 26 || program.shift <= 0) {
+  errorHandler('Invalid --shift number, please, enter number from 1 to 26');
 }
 
 let shiftNumber;
