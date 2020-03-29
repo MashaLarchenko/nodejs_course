@@ -41,9 +41,9 @@ const shiftAlphabet = (shiftNumber, char) => {
   if (shiftedIndex >= 0 && shiftedIndex <= lastIndex) {
     resultChar = alphabet[shiftedIndex];
   } else if (shiftedIndex < 0) {
-    resultChar = alphabet[lastIndex + shiftedIndex];
+    resultChar = alphabet[lastIndex + shiftedIndex + 1];
   } else {
-    resultChar = alphabet[shiftedIndex - lastIndex];
+    resultChar = alphabet[shiftedIndex - lastIndex - 1];
   }
   return isLowerCase ? resultChar : resultChar.toUpperCase();
 };
