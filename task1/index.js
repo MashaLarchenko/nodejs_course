@@ -3,8 +3,8 @@ const fs = require('fs');
 const through2 = require('through2');
 const { pipeline } = require('stream');
 const ReadStreamFactory = require('./readStreamFactory');
-const writeData = require('./writeData');
-const transformData = require('./transformData');
+const writeStreamOutput = require('./writeStream');
+const transformStream = require('./transformStream');
 const getAbsolutePath = require('./getAbsolutePath');
 const errorHandler = require('./errorHandler');
 
@@ -18,25 +18,43 @@ program
 
 program.parse(process.argv);
 
-if (!program.action || !program.shift) {
-  errorHandler('Action (encode/decode) are required argument');
+if (!program.action) {
+  errorHandler('Action (encode/decode) is required argument');
+}
+
+if (!program.shift) {
+  errorHandler('Shift is required argument, please enter number from 1 to 25');
 }
 
 if (program.output && !fs.existsSync(getAbsolutePath(program.output))) {
   errorHandler(`No such file or directory ${__dirname}/${program.output}`);
 }
 
-if (program.shift >= 26 || program.shift <= 0) {
-  errorHandler('Invalid --shift number, please, enter number from 1 to 26');
-}
+const shiftArg = ((num = program.shift) => {
+  let shiftNumber = num;
+  if (program.shift <= 26) {
+    return shiftNumber;
+  }
+  shiftNumber = Math.floor(shiftNumber % 26);
+  if (shiftNumber <= 26) {
+    return shiftNumber;
+  }
+  return shiftArg(shiftNumber);
+})();
+
+// if (program.shift >= 26 || program.shift <= 0) {
+//   errorHandler(
+//     'Invalid number for --shift argument , please, enter number from 1 to 25'
+//   );
+// }
 
 let shiftNumber;
 switch (program.action) {
   case 'encode':
-    shiftNumber = +program.shift;
+    shiftNumber = +shiftArg;
     break;
   case 'decode':
-    shiftNumber = -program.shift;
+    shiftNumber = -shiftArg;
     break;
   default:
     shiftNumber = '';
@@ -48,9 +66,9 @@ const readStream = program.input
   : factory.createConsoleReadStream();
 
 const transformer = through2((chunk, enc, callback) => {
-  transformData(chunk, enc, callback, shiftNumber);
+  transformStream(chunk, enc, callback, shiftNumber);
 });
-const writeStream = writeData(program.output);
+const writeStream = writeStreamOutput(program.output);
 
 pipeline(readStream, transformer, writeStream, err => {
   if (err) {
