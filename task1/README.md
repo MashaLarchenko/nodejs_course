@@ -4,7 +4,7 @@
 For encryption using Caesar cipher.  
 
 ### For start application:
-- Git clone: https://github.com/MashaLarchenko/nodejs_course.git  
+- Git clone: https://github.com/MashaLarchenko/nodejs_course 
 - npm install  
 - if you are in branch master switch to task1 branch and go to folder task1  
 - enter ```node index.js --action encode -s 7 -i "./input.txt" -o "./output.txt"```
