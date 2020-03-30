@@ -18,7 +18,7 @@ if (typeof program.action === 'function') {
 }
 
 if (!program.shift) {
-  errorHandler('Shift is required argument, please enter number from 1 to 25');
+  errorHandler('Shift is required argument, please enter number more than 0');
 }
 
 if (program.output && !fs.existsSync(getAbsolutePath(program.output))) {

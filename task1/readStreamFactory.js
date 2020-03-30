@@ -10,7 +10,7 @@ class ReadStreamFactory {
 
   createConsoleReadStream() {
     process.stdin.setEncoding('utf8');
-    process.stdout.write('Enter your data:\n');
+    process.stdout.write('Enter your data, for exit push CTRL + C:\n');
     return process.stdin.on('data', () => {
       const chunk = process.stdin.read();
       return chunk;
