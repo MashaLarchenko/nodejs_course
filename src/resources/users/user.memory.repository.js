@@ -7,34 +7,42 @@ const UsersData = [
   new User()
 ];
 
+const findById = id => {
+  return UsersData.find(user => {
+    return user.id === id;
+  });
+};
+
 const getAll = async () => {
   // TODO: mock implementation. should be replaced during task development
   return UsersData;
 };
 
 const getUserById = async id => {
-  const us = UsersData.find(user => {
-    return user.id === id;
-  });
+  const us = findById(id);
   const { name, login } = us;
 
   return { id, name, login };
 };
 
-const createUser = async (name, login, password) => {
-  const newUser = new User({ name, login, password });
+const createUser = async newUser => {
   UsersData.push(newUser);
   return newUser;
 };
 
-const updateUser = async (id, name, login, password) => {
-  const findUser = UsersData.find(user => {
-    return user.id === id;
-  });
+const updateUser = async (id, { name, login, password }) => {
+  const findUser = findById(id);
   findUser.name = name;
   findUser.login = login;
   findUser.password = password;
   return findUser;
 };
 
-module.exports = { getAll, getUserById, createUser, updateUser };
+const deleteUser = async id => {
+  const deletedUser = findById(id);
+  const index = UsersData.indexOf(deletedUser);
+  UsersData.splice(index, 1);
+  return UsersData;
+};
+
+module.exports = { getAll, getUserById, createUser, updateUser, deleteUser };

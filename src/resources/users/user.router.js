@@ -11,20 +11,24 @@ router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   const users = await usersService.getUserById(id);
 
-  res.json(users);
+  res.json(User.toResponse(users));
 });
 
 router.route('/').post(async (req, res) => {
-  const { name, login, password } = req.body;
-  const user = await usersService.createUser(name, login, password);
+  const user = await usersService.createUser(User.fromRequest(req.body));
   res.json(User.toResponse(user));
 });
 
 router.route('/:id').put(async (req, res) => {
   const { id } = req.params;
-  const { name, login, password } = req.body;
-  const user = await usersService.updateUser(id, name, login, password);
+  const user = await usersService.updateUser(id, req.body);
   res.json(user);
+});
+
+router.route('/:id').delete(async (req, res) => {
+  const { id } = req.params;
+  const users = await usersService.deleteUser(id);
+  res.json(users);
 });
 
 module.exports = router;
