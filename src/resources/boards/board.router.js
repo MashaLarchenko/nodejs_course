@@ -10,7 +10,6 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
   const boards = await boardsService.getBoardById(id);
-
   res.json(Board.toResponse(boards));
 });
 

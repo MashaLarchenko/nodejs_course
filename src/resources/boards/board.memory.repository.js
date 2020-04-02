@@ -8,8 +8,8 @@ const BoardsData = [
 ];
 
 const findById = id => {
-  return BoardsData.find(user => {
-    return user.id === id;
+  return BoardsData.find(board => {
+    return board.id === id;
   });
 };
 
