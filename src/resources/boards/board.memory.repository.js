@@ -1,13 +1,40 @@
 const Board = require('./board.model.js');
+const Column = require('./column.model.js');
+
+const tasksRepo = require('../task/task.memory.repository');
 
 const BoardsData = [
-  new Board({ id: '1', title: 'Board1', columns: 'column1' }),
-  new Board({ id: '2', title: 'Board2', columns: 'column2' }),
-  new Board({ id: '3', title: 'Board3', columns: 'column3' }),
+  new Board({
+    id: '1',
+    title: 'Board1',
+    columns: [
+      new Column({ title: 'column1B1', order: '0' }),
+      new Column({ title: 'column2B1', order: '1' }),
+      new Column()
+    ]
+  }),
+  new Board({
+    id: '2',
+    title: 'Board2',
+    columns: [
+      new Column({ title: 'column1B2', order: '0' }),
+      new Column({ title: 'column2B2', order: '1' }),
+      new Column()
+    ]
+  }),
+  new Board({
+    id: '3',
+    title: 'Board3',
+    columns: [
+      new Column({ title: 'column1B3', order: '0' }),
+      new Column({ title: 'column2B3', order: '1' }),
+      new Column()
+    ]
+  }),
   new Board()
 ];
 
-const findById = id => {
+const findById = async id => {
   return BoardsData.find(board => {
     return board.id === id;
   });
@@ -18,7 +45,7 @@ const getAll = async () => {
 };
 
 const getBoardById = async id => {
-  const board = findById(id);
+  const board = await findById(id);
   return board;
 };
 
@@ -28,17 +55,20 @@ const createBoard = async newBoard => {
 };
 
 const updateBoard = async (id, { title, columns }) => {
-  const findUser = findById(id);
+  const findUser = await findById(id);
   findUser.title = title;
   findUser.columns = columns;
   return findUser;
 };
 
 const deleteBoard = async id => {
-  const deletedBoard = findById(id);
-  const index = BoardsData.indexOf(deletedBoard);
-  BoardsData.splice(index, 1);
-  return BoardsData;
+  const deletedBoard = await findById(id);
+  if (deletedBoard) {
+    tasksRepo.deleteTaskfromBoard(id);
+    const index = BoardsData.indexOf(deletedBoard);
+    BoardsData.splice(index, 1);
+  }
+  return deletedBoard;
 };
 
 module.exports = {

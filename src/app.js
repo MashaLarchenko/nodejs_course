@@ -21,8 +21,41 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/users', userRouter);
-app.use('/boards', taskRouter);
-app.use('/boards', boardRouter);
+app.use(
+  '/users',
+  (err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error.ejs', {
+      message: err.message,
+      error: err
+    });
+    next(err);
+  },
+  userRouter
+);
+app.use(
+  '/boards',
+  (err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error.ejs', {
+      message: err.message,
+      error: err
+    });
+    next(err);
+  },
+  taskRouter
+);
+app.use(
+  '/boards',
+  (err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error.ejs', {
+      message: err.message,
+      error: err
+    });
+    next(err);
+  },
+  boardRouter
+);
 
 module.exports = app;

@@ -6,13 +6,9 @@ const getBoardById = id => boardsRepo.getBoardById(id);
 
 const createBoard = board => boardsRepo.createBoard(board);
 
-const updateBoard = (id, param) => {
-  boardsRepo.updateBoard(id, param);
-};
+const updateBoard = (id, param) => boardsRepo.updateBoard(id, param);
 
-const deleteBoard = id => {
-  boardsRepo.deleteBoard(id);
-};
+const deleteBoard = id => boardsRepo.deleteBoard(id);
 module.exports = {
   getAll,
   getBoardById,

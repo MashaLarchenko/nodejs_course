@@ -37,6 +37,17 @@ const findById = id => {
   });
 };
 
+const findByUserId = userId => {
+  return TasksData.map(task => {
+    console.log(task.userId === userId);
+    if (task.userId === userId) {
+      task.userId = null;
+      return task;
+    }
+    return task;
+  });
+};
+
 const findByBoardId = boardId => {
   return TasksData.filter(task => {
     return task.boardId === boardId;
@@ -44,12 +55,14 @@ const findByBoardId = boardId => {
 };
 
 const getAll = async boardId => {
-  console.log(findByBoardId(boardId));
   return findByBoardId(boardId);
 };
 
-const getTaskById = async id => {
-  const task = findById(id);
+const getTaskById = async (id, boardId) => {
+  const taskOnBoard = await getAll(boardId);
+  const task = taskOnBoard.find(el => {
+    return el.id === id;
+  });
   return task;
 };
 
@@ -73,11 +86,32 @@ const updateTask = async (
   return findUser;
 };
 
-const deleteTask = async id => {
-  const deletedTask = findById(id);
-  const index = TasksData.indexOf(deletedTask);
-  TasksData.splice(index, 1);
-  return TasksData;
+const deleteTask = async (id, boardId) => {
+  const boardTask = findByBoardId(boardId);
+  if (boardTask.length !== 0) {
+    boardTask.forEach(task => {
+      if (task.id === id) {
+        const index = TasksData.indexOf(task);
+        TasksData.splice(index, 1);
+      }
+    });
+  }
+  return boardTask;
+};
+
+const deleteTaskfromBoard = boardId => {
+  const deletedTask = findByBoardId(boardId);
+  if (deletedTask.length !== 0) {
+    deletedTask.forEach(task => {
+      const index = TasksData.indexOf(task);
+      TasksData.splice(index, 1);
+    });
+  }
+  return [];
+};
+
+const unassignTask = userId => {
+  return findByUserId(userId);
 };
 
 module.exports = {
@@ -85,5 +119,7 @@ module.exports = {
   getTaskById,
   createTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  deleteTaskfromBoard,
+  unassignTask
 };

@@ -9,8 +9,12 @@ router.route('/').get(async (req, res) => {
 
 router.route('/:id').get(async (req, res) => {
   const { id } = req.params;
-  const boards = await boardsService.getBoardById(id);
-  res.json(Board.toResponse(boards));
+  const board = await boardsService.getBoardById(id);
+  if (board !== undefined) {
+    res.json(Board.toResponse(board));
+  } else {
+    res.status(404).end();
+  }
 });
 
 router.route('/').post(async (req, res) => {
@@ -27,7 +31,12 @@ router.route('/:id').put(async (req, res) => {
 router.route('/:id').delete(async (req, res) => {
   const { id } = req.params;
   const board = await boardsService.deleteBoard(id);
-  res.json(board);
+  console.log(board, 'board del');
+  if (board !== undefined) {
+    res.status(204).end();
+  } else {
+    res.status(404).end();
+  }
 });
 
 module.exports = router;

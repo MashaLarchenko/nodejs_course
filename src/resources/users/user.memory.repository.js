@@ -1,5 +1,5 @@
 const User = require('./user.model.js');
-
+const tasksRepo = require('../task/task.memory.repository');
 const UsersData = [
   new User({ id: '1', name: 'Masha', login: 'masha', passwold: '122345n' }),
   new User({ id: '2', name: 'Sasha', login: 'sasha', passwold: '1334s' }),
@@ -7,7 +7,7 @@ const UsersData = [
   new User()
 ];
 
-const findById = id => {
+const findById = async id => {
   return UsersData.find(user => {
     return user.id === id;
   });
@@ -19,7 +19,7 @@ const getAll = async () => {
 };
 
 const getUserById = async id => {
-  const us = findById(id);
+  const us = await findById(id);
   const { name, login } = us;
 
   return { id, name, login };
@@ -31,7 +31,7 @@ const createUser = async newUser => {
 };
 
 const updateUser = async (id, { name, login, password }) => {
-  const findUser = findById(id);
+  const findUser = await findById(id);
   findUser.name = name;
   findUser.login = login;
   findUser.password = password;
@@ -39,10 +39,14 @@ const updateUser = async (id, { name, login, password }) => {
 };
 
 const deleteUser = async id => {
-  const deletedUser = findById(id);
-  const index = UsersData.indexOf(deletedUser);
-  UsersData.splice(index, 1);
-  return UsersData;
+  const deletedUser = await findById(id);
+  if (deletedUser) {
+    tasksRepo.unassignTask(id);
+    const index = UsersData.indexOf(deletedUser);
+    UsersData.splice(index, 1);
+  }
+
+  return deletedUser;
 };
 
 module.exports = { getAll, getUserById, createUser, updateUser, deleteUser };

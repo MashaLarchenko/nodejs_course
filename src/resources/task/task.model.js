@@ -20,8 +20,8 @@ class Task {
   }
 
   static toResponse(board) {
-    const { id, title, order, description, userId, boardId, columnId } = board;
-    return { id, title, order, description, userId, boardId, columnId };
+    // const { id, title, order, description, userId, boardId, columnId } = board;
+    return board;
   }
 
   static fromRequest(boardId, json) {
