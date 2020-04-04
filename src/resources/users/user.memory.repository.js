@@ -14,15 +14,16 @@ const findById = async id => {
 };
 
 const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
   return UsersData;
 };
 
 const getUserById = async id => {
-  const us = await findById(id);
-  const { name, login } = us;
-
-  return { id, name, login };
+  const user = await findById(id);
+  if (user) {
+    const { name, login } = user;
+    return { id, name, login };
+  }
+  return user;
 };
 
 const createUser = async newUser => {
@@ -30,12 +31,16 @@ const createUser = async newUser => {
   return newUser;
 };
 
-const updateUser = async (id, { name, login, password }) => {
+const updateUser = async (id, dataForUpdate) => {
   const findUser = await findById(id);
-  findUser.name = name;
-  findUser.login = login;
-  findUser.password = password;
-  return findUser;
+  const updatedUser = {
+    ...findUser,
+    ...dataForUpdate
+  };
+  const index = UsersData.indexOf(findUser);
+  UsersData[index] = updatedUser;
+
+  return updatedUser;
 };
 
 const deleteUser = async id => {
