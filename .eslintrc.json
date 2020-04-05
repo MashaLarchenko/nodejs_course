@@ -170,7 +170,7 @@
         "callback-return": 2,
         "no-mixed-requires": 2,
         "no-path-concat": 2,
-        "no-sync": 2,
+        "no-sync": 0,
         "handle-callback-err": 1,
         "no-new-require": 2,
         // Stylistic
@@ -274,6 +274,7 @@
             2,
             "never"
         ],
+        "no-process-exit": 0,
         "space-infix-ops": 2,
         "space-unary-ops": [
             2,
