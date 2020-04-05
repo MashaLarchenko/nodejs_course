@@ -31,12 +31,6 @@ const TasksData = [
   new Task()
 ];
 
-// const findById = id => {
-//   return TasksData.find(task => {
-//     return task.id === id;
-//   });
-// };
-
 const findByUserId = userId => {
   return TasksData.map(task => {
     if (task.userId === userId) {

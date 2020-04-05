@@ -20,7 +20,6 @@ class Task {
   }
 
   static fromRequest(boardId, json) {
-    // const { title, order, description, userId, columnId } = json;
     const user = new Task({
       ...json,
       boardId
