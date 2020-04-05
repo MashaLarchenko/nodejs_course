@@ -6,7 +6,8 @@ const getTaskById = (id, boardId) => tasksRepo.getTaskById(id, boardId);
 
 const createTask = task => tasksRepo.createTask(task);
 
-const updateTask = (id, param) => tasksRepo.updateTask(id, param);
+const updateTask = (id, boardId, param) =>
+  tasksRepo.updateTask(id, boardId, param);
 
 const deleteTask = (id, boardId) => tasksRepo.deleteTask(id, boardId);
 

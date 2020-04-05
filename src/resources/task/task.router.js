@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Task = require('./task.model');
 const tasksService = require('./task.service');
+const taskSchemas = require('./task.schema');
+const validator = require('../validator/validator');
 
 router.route('/:boardId/tasks').get(async (req, res) => {
   const { boardId } = req.params;
@@ -26,11 +28,20 @@ router.route('/:boardId/tasks').post(async (req, res) => {
   res.json(task);
 });
 
-router.route('/:boardId/tasks/:id').put(async (req, res) => {
-  const { id } = req.params;
-  const task = await tasksService.updateTask(id, req.body);
-  res.json(task);
-});
+router
+  .route('/:boardId/tasks/:id')
+  .put(
+    validator.validateSchemaPut(taskSchemas.schemaForPut),
+    async (req, res) => {
+      const { id, boardId } = req.params;
+      const task = await tasksService.updateTask(id, boardId, req.body);
+      if (task !== undefined) {
+        res.status(200).json(task);
+      } else {
+        res.status(404).end();
+      }
+    }
+  );
 
 router.route('/:boardId/tasks/:id').delete(async (req, res) => {
   const { id, boardId } = req.params;

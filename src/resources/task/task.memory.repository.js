@@ -31,11 +31,11 @@ const TasksData = [
   new Task()
 ];
 
-const findById = id => {
-  return TasksData.find(task => {
-    return task.id === id;
-  });
-};
+// const findById = id => {
+//   return TasksData.find(task => {
+//     return task.id === id;
+//   });
+// };
 
 const findByUserId = userId => {
   return TasksData.map(task => {
@@ -70,19 +70,19 @@ const createTask = async newTask => {
   return newTask;
 };
 
-const updateTask = async (
-  id,
-  { title, order, description, userId, boardId, columnId }
-) => {
-  const findUser = findById(id);
-  findUser.title = title;
-  findUser.order = order;
-  findUser.description = description;
-  findUser.userId = userId;
-  findUser.boardId = boardId;
-  findUser.columnId = columnId;
+const updateTask = async (id, boardId, dataForUpdate) => {
+  const findTask = await getTaskById(id, boardId);
+  if (findTask) {
+    const updatedTask = {
+      ...findTask,
+      ...dataForUpdate
+    };
+    const index = TasksData.indexOf(findTask);
+    TasksData[index] = updatedTask;
+    return updatedTask;
+  }
 
-  return findUser;
+  return findTask;
 };
 
 const deleteTask = async (id, boardId) => {

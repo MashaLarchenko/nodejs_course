@@ -7,8 +7,8 @@ class Task {
     order = '0',
     description = 'task',
     userId = 'null',
-    boardId = '1',
-    columnId = '1'
+    columnId = '1',
+    boardId = '1'
   } = {}) {
     this.id = id;
     this.title = title;
@@ -20,14 +20,10 @@ class Task {
   }
 
   static fromRequest(boardId, json) {
-    const { title, order, description, userId, columnId } = json;
+    // const { title, order, description, userId, columnId } = json;
     const user = new Task({
-      title,
-      order,
-      description,
-      userId,
-      boardId,
-      columnId
+      ...json,
+      boardId
     });
     return user;
   }
