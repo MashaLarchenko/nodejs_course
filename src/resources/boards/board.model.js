@@ -7,11 +7,6 @@ class Board {
     this.columns = columns;
   }
 
-  static toResponse(board) {
-    // const { id, title, columns } = board;
-    return board;
-  }
-
   static fromRequest(json) {
     const { title, columns } = json;
     const user = new Board({ title, columns });

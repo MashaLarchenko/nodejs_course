@@ -54,11 +54,15 @@ const createBoard = async newBoard => {
   return newBoard;
 };
 
-const updateBoard = async (id, { title, columns }) => {
-  const findUser = await findById(id);
-  findUser.title = title;
-  findUser.columns = columns;
-  return findUser;
+const updateBoard = async (id, dataForUpdate) => {
+  const findBoard = await findById(id);
+  const updatedBoard = {
+    ...findBoard,
+    ...dataForUpdate
+  };
+  const index = BoardsData.indexOf(findBoard);
+  BoardsData[index] = updatedBoard;
+  return updatedBoard;
 };
 
 const deleteBoard = async id => {

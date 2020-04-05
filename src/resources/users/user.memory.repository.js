@@ -1,5 +1,6 @@
 const User = require('./user.model.js');
 const tasksRepo = require('../task/task.memory.repository');
+
 const UsersData = [
   new User({ id: '1', name: 'Masha', login: 'masha', passwold: '122345n' }),
   new User({ id: '2', name: 'Sasha', login: 'sasha', passwold: '1334s' }),
@@ -39,7 +40,6 @@ const updateUser = async (id, dataForUpdate) => {
   };
   const index = UsersData.indexOf(findUser);
   UsersData[index] = updatedUser;
-
   return updatedUser;
 };
 

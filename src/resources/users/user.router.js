@@ -48,7 +48,6 @@ router.route('/:id').delete(async (req, res) => {
   } else {
     res.status(404).end();
   }
-  // res.json(users);
 });
 
 module.exports = router;

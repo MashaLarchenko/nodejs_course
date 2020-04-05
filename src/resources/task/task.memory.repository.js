@@ -39,7 +39,6 @@ const findById = id => {
 
 const findByUserId = userId => {
   return TasksData.map(task => {
-    console.log(task.userId === userId);
     if (task.userId === userId) {
       task.userId = null;
       return task;

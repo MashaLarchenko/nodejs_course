@@ -19,11 +19,6 @@ class Task {
     this.columnId = columnId;
   }
 
-  static toResponse(board) {
-    // const { id, title, order, description, userId, boardId, columnId } = board;
-    return board;
-  }
-
   static fromRequest(boardId, json) {
     const { title, order, description, userId, columnId } = json;
     const user = new Task({

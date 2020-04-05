@@ -9,6 +9,7 @@ const createTask = task => tasksRepo.createTask(task);
 const updateTask = (id, param) => tasksRepo.updateTask(id, param);
 
 const deleteTask = (id, boardId) => tasksRepo.deleteTask(id, boardId);
+
 module.exports = {
   getAll,
   getTaskById,

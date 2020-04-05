@@ -5,18 +5,17 @@ const tasksService = require('./task.service');
 router.route('/:boardId/tasks').get(async (req, res) => {
   const { boardId } = req.params;
   const tasks = await tasksService.getAll(boardId);
-  res.json(tasks.map(Task.toResponse));
+  res.json(tasks);
 });
 
 router.route('/:boardId/tasks/:id').get(async (req, res) => {
   const { boardId, id } = req.params;
   const task = await tasksService.getTaskById(id, boardId);
   if (task !== undefined) {
-    res.json(Task.toResponse(task));
+    res.json(task);
   } else {
     res.status(404).end();
   }
-  // res.json(Task.toResponse(tasks));
 });
 
 router.route('/:boardId/tasks').post(async (req, res) => {
@@ -24,7 +23,7 @@ router.route('/:boardId/tasks').post(async (req, res) => {
   const task = await tasksService.createTask(
     Task.fromRequest(boardId, req.body)
   );
-  res.json(Task.toResponse(task));
+  res.json(task);
 });
 
 router.route('/:boardId/tasks/:id').put(async (req, res) => {
